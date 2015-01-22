@@ -76,7 +76,16 @@ install(
 	ARCHIVE DESTINATION lib
 )
 
-install(CODE "execute_process( COMMAND bash -x -c \"sed -e 's%@prefix@%${CMAKE_INSTALL_PREFIX}%g' -e 's%@exec_prefix@%\\\${prefix}%g' -e 's%@libdir@%\\\${prefix}/lib%g' -e 's%@includedir@%\\\${prefix}/include%g' -e 's/\@version\@/${GLEW_VERSION}/g' -e 's/\@cflags\@//g' -e 's/\@libname\@/${GLEW_LIB_NAME}/g' -e 's|@requireslib@|glu|g' < ${CMAKE_SOURCE_DIR}/glew.pc.in > ${CMAKE_BINARY_DIR}/glew.pc\" )" )
-install(CODE "execute_process( COMMAND bash -x -c \"sed -e 's%@prefix@%${CMAKE_INSTALL_PREFIX}%g' -e 's%@exec_prefix@%\\\${prefix}%g' -e 's%@libdir@%\\\${prefix}/lib%g' -e 's%@includedir@%\\\${prefix}/include%g' -e 's/\@version\@/${GLEW_VERSION}/g' -e 's/\@cflags\@/-DGLEW_MX/g' -e 's/\@libname\@/${GLEW_LIB_NAME}mx/g' -e 's|@requireslib@|glu|g' < ${CMAKE_SOURCE_DIR}/glew.pc.in > ${CMAKE_BINARY_DIR}/glewmx.pc\" )" )
+install(
+  FILES
+    include/GL/glew.h
+    include/GL/glxew.h
+    include/GL/wglew.h
+  DESTINATION include/GL
+  COMPONENT Development
+)
 
-install(FILES ${CMAKE_BINARY_DIR}/glew.pc ${CMAKE_BINARY_DIR}/glewmx.pc DESTINATION lib/pkgconfig)
+# install(CODE "execute_process( COMMAND bash -x -c \"sed -e 's%@prefix@%${CMAKE_INSTALL_PREFIX}%g' -e 's%@exec_prefix@%\\\${prefix}%g' -e 's%@libdir@%\\\${prefix}/lib%g' -e 's%@includedir@%\\\${prefix}/include%g' -e 's/\@version\@/${GLEW_VERSION}/g' -e 's/\@cflags\@//g' -e 's/\@libname\@/${GLEW_LIB_NAME}/g' -e 's|@requireslib@|glu|g' < ${CMAKE_SOURCE_DIR}/glew.pc.in > ${CMAKE_BINARY_DIR}/glew.pc\" )" )
+# install(CODE "execute_process( COMMAND bash -x -c \"sed -e 's%@prefix@%${CMAKE_INSTALL_PREFIX}%g' -e 's%@exec_prefix@%\\\${prefix}%g' -e 's%@libdir@%\\\${prefix}/lib%g' -e 's%@includedir@%\\\${prefix}/include%g' -e 's/\@version\@/${GLEW_VERSION}/g' -e 's/\@cflags\@/-DGLEW_MX/g' -e 's/\@libname\@/${GLEW_LIB_NAME}mx/g' -e 's|@requireslib@|glu|g' < ${CMAKE_SOURCE_DIR}/glew.pc.in > ${CMAKE_BINARY_DIR}/glewmx.pc\" )" )
+#
+# install(FILES ${CMAKE_BINARY_DIR}/glew.pc ${CMAKE_BINARY_DIR}/glewmx.pc DESTINATION lib/pkgconfig)
