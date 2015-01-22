@@ -21,19 +21,20 @@ endif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 #
 # All platforms need OpenGL
 #
-
-include(FindPkgConfig)
-pkg_check_modules( OpenGL REQUIRED gl )
+#FindOpenGL
+find_package(OpenGL REQUIRED)
+# include(FindPkgConfig)
+# pkg_check_modules( OpenGL REQUIRED gl )
 
 #
 # Linux needs X11
 #
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    find_package(X11 REQUIRED)
+  find_package(X11 REQUIRED)
+  set(CMAKE_C_FLAGS "${CFLAGS} ${CMAKE_C_FLAGS} -DGLEW_BUILD -DGLEW_NO_GLU -O2 -Wall -W" )
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
-set(CMAKE_C_FLAGS "${CFLAGS} ${CMAKE_C_FLAGS} -DGLEW_BUILD -DGLEW_NO_GLU -O2 -Wall -W" )
 
 include_directories( ${PROJECT_SOURCE_DIR}/include )
 
@@ -41,23 +42,23 @@ add_library(GLEW_static STATIC src/glew.c )
 add_library(GLEW_shared SHARED src/glew.c )
 set_target_properties(GLEW_static PROPERTIES OUTPUT_NAME ${GLEW_LIB_NAME} PREFIX lib)
 set_target_properties(GLEW_shared PROPERTIES OUTPUT_NAME ${GLEW_LIB_NAME} PREFIX "${DLL_PREFIX}")
-target_link_libraries(GLEW_shared ${OpenGL_LDFLAGS})
+target_link_libraries(GLEW_shared ${OPENGL_LIBRARIES})
 
 add_library(GLEW_MX_static STATIC src/glew.c )
 add_library(GLEW_MX_shared SHARED src/glew.c )
 set_target_properties(GLEW_MX_static PROPERTIES OUTPUT_NAME ${GLEW_LIB_NAME}mx COMPILE_FLAGS "-DGLEW_MX" PREFIX lib)
 set_target_properties(GLEW_MX_shared PROPERTIES OUTPUT_NAME ${GLEW_LIB_NAME}mx COMPILE_FLAGS "-DGLEW_MX" PREFIX "${DLL_PREFIX}")
-target_link_libraries(GLEW_MX_shared ${OpenGL_LDFLAGS})
+target_link_libraries(GLEW_MX_shared ${OPENGL_LIBRARIES})
 
 add_executable(glewinfo src/glewinfo.c)
-target_link_libraries(glewinfo GLEW_shared ${OpenGL_LDFLAGS})
+target_link_libraries(glewinfo GLEW_shared ${OPENGL_LIBRARIES})
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     target_link_libraries(glewinfo ${X11_LIBRARIES})
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 add_executable(visualinfo src/visualinfo.c)
-target_link_libraries(visualinfo GLEW_shared ${OpenGL_LDFLAGS})
+target_link_libraries(visualinfo GLEW_shared ${OPENGL_LIBRARIES})
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     target_link_libraries(visualinfo ${X11_LIBRARIES})
